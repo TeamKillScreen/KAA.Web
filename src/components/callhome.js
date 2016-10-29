@@ -2,7 +2,7 @@
  * Created by julianmonono on 29/10/2016.
  */
 import React, { Component } from 'react';
-import { Form, FormGroup, Button, Col, ControlLabel, FormControl, Panel } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Panel } from 'react-bootstrap';
 var Dropzone = require('react-dropzone');
 import request from 'superagent';
 
@@ -31,27 +31,30 @@ class CallHome extends Component {
         console.log('Uploaded file: ', file);
         console.log('with message: ', messageToSend);
 
-        var base64data;
+        var base64data = null;
         var reader = new window.FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = function() {
             base64data = reader.result;
+            base64data = base64data.replace('data:image/jpeg;base64,','')
             // console.log(base64data);
+
+            let upload = request.post('https://api-keepinganappearance.azurewebsites.net/api/identify')
+                .send({ "filename": file.name, "content": base64data })
+                .set('Accept', 'application/json');
+
+            upload.end((err, response) => {
+                if (err) {
+                    console.error(err);
+                }
+
+                if(response && response.ok) {
+                    console.log('yay got ' + JSON.stringify(response.body));
+                }
+            });
         }
 
-        let upload = request.post('https://api-keepinganappearance.azurewebsites.net/api/identity')
-            .send({ filename: file.name, content: base64data })
-            .set('Accept', 'application/json');
 
-        upload.end((err, response) => {
-            if (err) {
-                console.error(err);
-            }
-
-            if(response && response.ok) {
-                console.log('yay got ' + JSON.stringify(response.body));
-            }
-        });
     }
 
     onImageDropped(files) {

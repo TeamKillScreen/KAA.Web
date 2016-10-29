@@ -39,7 +39,7 @@ class CallHome extends Component {
             // console.log(base64data);
         }
 
-        let upload = request.post('http://api-keepinganappearance.azurewebsites.net/api/identity')
+        let upload = request.post('https://api-keepinganappearance.azurewebsites.net/api/identity')
             .send({ filename: file.name, content: base64data })
             .set('Accept', 'application/json');
 

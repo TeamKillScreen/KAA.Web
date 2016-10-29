@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, Button, Col, ControlLabel, FormControl, Panel } from 'react-bootstrap';
 var Dropzone = require('react-dropzone');
+import request from 'superagent';
 
 const title = (
     <h3>Upload your picture</h3>
@@ -29,6 +30,28 @@ class CallHome extends Component {
     handleImageUpload(file, messageToSend) {
         console.log('Uploaded file: ', file);
         console.log('with message: ', messageToSend);
+
+        var base64data;
+        var reader = new window.FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = function() {
+            base64data = reader.result;
+            // console.log(base64data);
+        }
+
+        let upload = request.post('http://api-keepinganappearance.azurewebsites.net/api/identity')
+            .send({ filename: file.name, content: base64data })
+            .set('Accept', 'application/json');
+
+        upload.end((err, response) => {
+            if (err) {
+                console.error(err);
+            }
+
+            if(response && response.ok) {
+                console.log('yay got ' + JSON.stringify(response.body));
+            }
+        });
     }
 
     onImageDropped(files) {

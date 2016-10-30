@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
-<script src="superagent.js"></script>
 <script src="webcam.js"></script>
 
 <title>React App</title>
@@ -20,22 +19,21 @@
         function take_snapshot() {
             Webcam.snap( function(data_uri) {
                 base64data = data_uri.replace('data:image/jpeg;base64,','');
-                var request = require('superagent');
                 
-                var upload = request.post('https://api-keepinganappearance.azurewebsites.net/api/identify')
-                    .send({ "filename": StringExtensions.hashString(file.name) + '.jpg', "content": base64data })
-                    .set('Accept', 'application/json');
-    
-                upload.end(function (err, response) {
-                    if (err) {
-                        console.error(err);
-                    }
-    
-                    if(response && response.ok) {
-                        console.log('yay got ' + JSON.stringify(response.body));
-                        onSuccess(file);
-                    }
-                });
+                var httpPost = new XMLHttpRequest(),
+                path = "https://api-keepinganappearance.azurewebsites.net/api/identify",
+                data = { "filename": StringExtensions.hashString(file.name) + '.jpg', "content": base64data }
+                httpPost.onreadystatechange = function(err) {
+                        if (httpPost.readyState == 4 && httpPost.status == 200){
+                            console.log(httpPost.responseText);
+                        } else {
+                            console.log(err);
+                        }
+                    };
+                // Set the content type of the request to json since that's what's being sent
+                httpPost.setHeader('Content-Type', 'application/json');
+                httpPost.open("POST", path, true);
+                httpPost.send(data);
                 
                 document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';
             } );

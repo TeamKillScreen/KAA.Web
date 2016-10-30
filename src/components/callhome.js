@@ -3,8 +3,10 @@
  */
 import React, { Component } from 'react';
 import { Form, FormGroup, ControlLabel, FormControl, Panel } from 'react-bootstrap';
-var Dropzone = require('react-dropzone');
+import StringExtensions from './stringextensions';
 import request from 'superagent';
+
+var Dropzone = require('react-dropzone');
 
 const title = (
     <h3>Upload your picture</h3>
@@ -16,7 +18,7 @@ class CallHome extends Component {
         super(props);
 
         this.state = {
-            uploadedImage: null,
+            uploadedImage: '',
             messageToSend: ''
         };
     }
@@ -27,7 +29,13 @@ class CallHome extends Component {
         });
     }
 
-    handleImageUpload(file, messageToSend) {
+    onFileUploaded(file) {
+        this.setState({
+            uploadedImage: file
+        });
+    }
+
+    handleImageUpload(file, messageToSend, onSuccess) {
         console.log('Uploaded file: ', file);
         console.log('with message: ', messageToSend);
 
@@ -40,7 +48,7 @@ class CallHome extends Component {
             // console.log(base64data);
 
             let upload = request.post('https://api-keepinganappearance.azurewebsites.net/api/identify')
-                .send({ "filename": file.name, "content": base64data })
+                .send({ "filename": StringExtensions.hashString(file.name) + '.jpg', "content": base64data })
                 .set('Accept', 'application/json');
 
             upload.end((err, response) => {
@@ -50,6 +58,7 @@ class CallHome extends Component {
 
                 if(response && response.ok) {
                     console.log('yay got ' + JSON.stringify(response.body));
+                    onSuccess(file.name);
                 }
             });
         }
@@ -66,11 +75,11 @@ class CallHome extends Component {
 
         console.log('Received files: ', files);
 
-        component.setState({
-            uploadedImage: files[0]
-        });
+        // component.setState({
+        //     uploadedImage: files[0]
+        // });
 
-        component.handleImageUpload(files[0], component.state.messageToSend);
+        component.handleImageUpload(files[0], component.state.messageToSend, this.onFileUploaded.bind(component));
     };
 
     getFormInstance() {
@@ -96,6 +105,12 @@ class CallHome extends Component {
                 <Panel header={title} bsStyle="primary">
                     {this.getFormInstance()}
                 </Panel>
+                <div>
+                    {this.state.uploadedImage === '' ? null :
+                        <Panel header={<h3>You called home</h3>} bsStyle="success">
+                            Thank you for calling home
+                        </Panel>}
+                </div>
             </div>
         );
     }

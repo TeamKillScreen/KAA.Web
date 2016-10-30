@@ -8,6 +8,8 @@ import App from './App';
 import About from './components/about';
 import Home from './components/home';
 import CallHome from './components/callhome';
+import Login from './components/login';
+import Portal from './components/portal';
 
 const Routes = (props) => (
     <Router {...props}>
@@ -15,6 +17,8 @@ const Routes = (props) => (
             <IndexRoute component={Home} />
             <Route path="about" component={About}/>
             <Route path="callhome" component={CallHome}/>
+            <Route path="login" component={Login}/>
+            <Route path="portal" component={Portal}/>
         </Route>
     </Router>
 );

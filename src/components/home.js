@@ -13,12 +13,12 @@ class Home extends Component {
                     <h1>Welcome to Keeping An Appearance</h1>
                     <p>
                         <Link className="btn btn-info btn-lg" role="button"
-                              to="/callhome" params={{id: this.props.params.id}}>
+                              to="/callhome">
                             Call home
                         </Link>
                         <span className="spacer" />
                         <Link className="btn btn-info btn-lg" role="button"
-                              to="/portal" params={{id: this.props.params.id}}>
+                              to="/portal">
                             My missing person
                         </Link>
                     </p>

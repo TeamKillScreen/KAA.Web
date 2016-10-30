@@ -22,6 +22,11 @@ class Home extends Component {
                             Call home
                         </Link>
                         <span className="spacer" />
+                        <a className="btn btn-info btn-lg" role="button"
+                              href="/kiosk/kiosk.html">
+                            Call home
+                        </a>
+                        <span className="spacer" />
                         <Link className="btn btn-info btn-lg" role="button"
                               to="/portal/3F3A393B3B36373A333A">
                             My missing person - Craig

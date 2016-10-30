@@ -16,6 +16,16 @@
     <script language="JavaScript">
         Webcam.attach( '#my_camera' );
 
+        function start_snapshot(counter) {
+            if(counter < 100){
+                setTimeout(function(){
+                counter++;
+                console.log(counter);
+                take_snapshot();
+                start_snapshot(counter);
+                }, 5000);
+            }
+        };
         function take_snapshot() {
             var lat = 53.47731349999999;
             var long = -2.2549624000000676;
@@ -56,6 +66,6 @@
         }
     </script>
 
-    <a href="javascript:void(take_snapshot())">Take Snapshot</a>
+    <a href="javascript:void(start_snapshot())">Start Monitoring</a>
   </body>
 </html>

@@ -21,8 +21,11 @@
                 base64data = data_uri.replace('data:image/jpeg;base64,','');
                 
                 var httpPost = new XMLHttpRequest(),
-                path = "https://api-keepinganappearance.azurewebsites.net/api/identify",
-                data = { "filename": StringExtensions.hashString(file.name) + '.jpg', "content": base64data }
+                path = "https://api-keepinganappearance.azurewebsites.net/api/identify";
+ 
+                guid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+                
+                data = { "filename": guid + '.jpg', "content": base64data }
                 httpPost.onreadystatechange = function(err) {
                         if (httpPost.readyState == 4 && httpPost.status == 200){
                             console.log(httpPost.responseText);
@@ -37,6 +40,10 @@
                 
                 document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';
             } );
+        }
+        
+        function S4() {
+            return (((1+Math.random())*0x10000)|0).toString(16).substring(1); 
         }
     </script>
 

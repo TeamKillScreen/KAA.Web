@@ -86,6 +86,8 @@ class Portal extends Component {
                         <FormGroup>
                             <Col componentClass={ControlLabel} sm={12}>
                                 Location: Lat: {match.latLocation} Long: {match.longLocation}
+                                <img src="https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&key=AIzaSyA5HI9OG4By0v4sKqrpk-yfh8zk8oMR_TE"
+                                     alt="Montana" width="171" height="220" />
                             </Col>
                         </FormGroup>
                     </Form>

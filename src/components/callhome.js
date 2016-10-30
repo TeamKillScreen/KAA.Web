@@ -18,8 +18,9 @@ class CallHome extends Component {
         super(props);
 
         this.state = {
-            uploadedImage: '',
-            messageToSend: ''
+            uploadedImage: null,
+            messageToSend: '',
+            selectedFile: null
         };
     }
 
@@ -44,7 +45,7 @@ class CallHome extends Component {
         reader.readAsDataURL(file);
         reader.onloadend = function() {
             base64data = reader.result;
-            base64data = base64data.replace('data:image/jpeg;base64,','')
+            base64data = base64data.replace('data:image/jpeg;base64,','');
             // console.log(base64data);
 
             let upload = request.post('https://api-keepinganappearance.azurewebsites.net/api/identify')
@@ -58,7 +59,7 @@ class CallHome extends Component {
 
                 if(response && response.ok) {
                     console.log('yay got ' + JSON.stringify(response.body));
-                    onSuccess(file.name);
+                    onSuccess(file);
                 }
             });
         }
@@ -74,15 +75,14 @@ class CallHome extends Component {
         }
 
         console.log('Received files: ', files);
-
-        // component.setState({
-        //     uploadedImage: files[0]
-        // });
+        component.setState({
+            selectedFile: files[0]
+        });
 
         component.handleImageUpload(files[0], component.state.messageToSend, this.onFileUploaded.bind(component));
     };
 
-    getFormInstance() {
+    getDropzoneForm() {
         return (<Form>
                     <FormGroup>
                         <ControlLabel>First enter your message</ControlLabel>
@@ -98,15 +98,21 @@ class CallHome extends Component {
     }
 
     render() {
+        let awaitingUpload = this.state.uploadedImage === null;
+        let noFileSelected = this.state.selectedFile === null;
         return (
             <div>
                 <h1>Call Home</h1>
                 <p>Upload a picture of yourself with a message to let your loved ones know you're OK</p>
                 <Panel header={title} bsStyle="primary">
-                    {this.getFormInstance()}
+                    {noFileSelected ? this.getDropzoneForm() :
+                        <div>
+                            <img width="177" height="212" src={this.state.selectedFile.preview} alt="preview" />
+                            <p>Your chosen message: {this.state.messageToSend}</p>
+                        </div>}
                 </Panel>
                 <div>
-                    {this.state.uploadedImage === '' ? null :
+                    {awaitingUpload ? null :
                         <Panel header={<h3>You called home</h3>} bsStyle="success">
                             Thank you for calling home
                         </Panel>}

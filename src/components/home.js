@@ -13,6 +13,11 @@ class Home extends Component {
                     <h1>Welcome to Crowd Found</h1>
                     <p>
                         <Link className="btn btn-info btn-lg" role="button"
+                              to="/about">
+                            About
+                        </Link>
+                        <span className="spacer" />
+                        <Link className="btn btn-info btn-lg" role="button"
                               to="/callhome">
                             Call home
                         </Link>

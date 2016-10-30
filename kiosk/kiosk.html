@@ -17,6 +17,15 @@
         Webcam.attach( '#my_camera' );
 
         function take_snapshot() {
+            var lat = 0;
+            var long = 0;
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    lat = position.coords.latitude;
+                    long = position.coords.longitude;
+                });
+            }
+            
             Webcam.snap( function(data_uri) {
                 base64data = data_uri.replace('data:image/jpeg;base64,','');
                 
@@ -25,7 +34,7 @@
  
                 guid = (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
                 
-                data = { "filename": guid + '.jpg', "content": base64data }
+                data = { "filename": guid + '.jpg', "content": base64data, "lat": lat, "long": long }
                 httpPost.onreadystatechange = function(err) {
                         if (httpPost.readyState == 4 && httpPost.status == 200){
                             console.log(httpPost.responseText);

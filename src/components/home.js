@@ -18,7 +18,7 @@ class Home extends Component {
                         </Link>
                         <span className="spacer" />
                         <Link className="btn btn-info btn-lg" role="button"
-                              to="/portal/1234">
+                              to="/portal/3F3A393B3B36373A333A">
                             My missing person
                         </Link>
                     </p>

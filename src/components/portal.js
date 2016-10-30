@@ -17,9 +17,11 @@ class Portal extends Component {
 
     componentDidMount() {
         var component = this;
-        // Get the persons profile picture
+        var requestedPerson = component.props.params.personId || '';
+
+        // Get the person based on retrieved ID
         request
-            .get('https://api-keepinganappearance.azurewebsites.net/api/mugshotofperson/ID')
+            .get('https://api-keepinganappearance.azurewebsites.net/api/mugshotofperson/' + requestedPerson)
             .type('application/json')
             .end(function(err, res){
                 if (err) {
@@ -29,14 +31,33 @@ class Portal extends Component {
 
                 if (res && res.ok) {
                     component.setState({
-                        personUrl: res.body.mugshot_url,
-                        matchUrls: [
-                            {
-                                personUrl: 'https://www.xing.com/image/7_c_6_41561111f_19251505_1/thomas-winter-foto.1024x1024.jpg',
-                                dateRecorded: '12th August 2016',
-                                locationRecorded: 'Lincoln'
-                            }
-                        ]
+                        personUrl: res.body.mugshot_url
+                    });
+                }
+            });
+
+        // Now get persons matched photos
+        request
+            .get('https://api-keepinganappearance.azurewebsites.net/api/matchingphotosofperson/' + requestedPerson)
+            .type('application/json')
+            .end(function (err, res) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+
+                if (res && res.ok) {
+                    var mappedResults = res.body.photos.map(function(photo) {
+                        return {
+                            personUrl: photo.photo_url,
+                            latLocation: photo.location.lat,
+                            longLocation: photo.location.long,
+                            dateRecorded: '30th October 2016'
+                        };
+                    });
+
+                    component.setState({
+                        matchUrls: mappedResults
                     });
                 }
             });
@@ -49,7 +70,7 @@ class Portal extends Component {
 
         var matches = this.state.matchUrls.map(function(match, index) {
             return (
-                <div key={index}>
+                <div key={index} className="clearfix">
                     <div className="float-left">
                         <Image src={match.personUrl}
                                responsive
@@ -64,7 +85,7 @@ class Portal extends Component {
                         </FormGroup>
                         <FormGroup>
                             <Col componentClass={ControlLabel} sm={12}>
-                                Location: {match.locationRecorded}
+                                Location: Lat: {match.latLocation} Long: {match.longLocation}
                             </Col>
                         </FormGroup>
                     </Form>

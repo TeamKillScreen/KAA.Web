@@ -34,8 +34,8 @@
                         }
                     };
                 // Set the content type of the request to json since that's what's being sent
-                httpPost.setRequestHeader('Content-Type', 'application/json');
                 httpPost.open("POST", path, true);
+                httpPost.setRequestHeader('Content-Type', 'application/json');
                 httpPost.send(data);
                 
                 document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';

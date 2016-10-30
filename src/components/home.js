@@ -24,7 +24,7 @@ class Home extends Component {
                         <span className="spacer" />
                         <a className="btn btn-info btn-lg" role="button"
                               href="/kiosk/kiosk.html">
-                            Call home
+                            Kiosk Mode
                         </a>
                         <span className="spacer" />
                         <Link className="btn btn-info btn-lg" role="button"

@@ -113,10 +113,10 @@ class Portal extends Component {
                         </div>
                         {(match.latLocation === 0 && match.longLocation === 0 ? <div></div> :
                             <div className="sighting-card-div">
-                                <Image src={imageSource}
+                                <a href={imageSource} target="_blank"><Image src={imageSource}
 
                                        width="50%"
-                                       height="170"/>
+                                       height="170"/></a>
                             </div>)}
                     </Panel>
                 </div>

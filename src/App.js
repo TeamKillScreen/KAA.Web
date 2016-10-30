@@ -10,7 +10,7 @@ class App extends Component {
             <Grid>
               <Navbar.Header>
                 <Navbar.Brand>
-                  <a href="/">Keeping An Appearance</a>
+                  <a href="/">Crowd Found</a>
                 </Navbar.Brand>
                 <Navbar.Toggle />
               </Navbar.Header>

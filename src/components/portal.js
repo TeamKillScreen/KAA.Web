@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { FormGroup, Form, ControlLabel, Col, Image } from 'react-bootstrap';
+import request from 'superagent';
 
 class Portal extends Component {
     constructor(props) {
@@ -15,16 +16,30 @@ class Portal extends Component {
     }
 
     componentDidMount() {
-        this.setState({
-            personUrl: 'https://www.xing.com/image/7_c_6_41561111f_19251505_1/thomas-winter-foto.1024x1024.jpg',
-            matchUrls: [
-                {
-                    personUrl: 'https://www.xing.com/image/7_c_6_41561111f_19251505_1/thomas-winter-foto.1024x1024.jpg',
-                    dateRecorded: '12th August 2016',
-                    locationRecorded: 'Lincoln'
+        var component = this;
+        // Get the persons profile picture
+        request
+            .get('https://api-keepinganappearance.azurewebsites.net/api/mugshotofperson/ID')
+            .type('application/json')
+            .end(function(err, res){
+                if (err) {
+                    console.error(err);
+                    return;
                 }
-            ]
-        });
+
+                if (res && res.ok) {
+                    component.setState({
+                        personUrl: res.body.mugshot_url,
+                        matchUrls: [
+                            {
+                                personUrl: 'https://www.xing.com/image/7_c_6_41561111f_19251505_1/thomas-winter-foto.1024x1024.jpg',
+                                dateRecorded: '12th August 2016',
+                                locationRecorded: 'Lincoln'
+                            }
+                        ]
+                    });
+                }
+            });
     }
 
     buildPotentialMatches() {

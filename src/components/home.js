@@ -10,7 +10,7 @@ class Home extends Component {
         return (
             <Jumbotron>
                 <Grid>
-                    <h1>Welcome to Keeping An Appearance</h1>
+                    <h1>Welcome to Crowd Found</h1>
                     <p>
                         <Link className="btn btn-info btn-lg" role="button"
                               to="/callhome">
@@ -18,7 +18,7 @@ class Home extends Component {
                         </Link>
                         <span className="spacer" />
                         <Link className="btn btn-info btn-lg" role="button"
-                              to="/portal">
+                              to="/portal/1234">
                             My missing person
                         </Link>
                     </p>

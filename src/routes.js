@@ -18,7 +18,7 @@ const Routes = (props) => (
             <Route path="about" component={About}/>
             <Route path="callhome" component={CallHome}/>
             <Route path="login" component={Login}/>
-            <Route path="portal" component={Portal}/>
+            <Route path="portal/:personId" component={Portal}/>
         </Route>
     </Router>
 );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Grid, Navbar, Jumbotron, Button } from 'react-bootstrap';
+import { Grid, Navbar } from 'react-bootstrap';
 
 class App extends Component {
   render() {
@@ -10,26 +10,15 @@ class App extends Component {
             <Grid>
               <Navbar.Header>
                 <Navbar.Brand>
-                  <a href="/">React App</a>
+                  <a href="/">Keeping An Appearance</a>
                 </Navbar.Brand>
                 <Navbar.Toggle />
               </Navbar.Header>
             </Grid>
           </Navbar>
-          <Jumbotron>
-            <Grid>
-              <h1>Welcome to React</h1>
-              <p>
-                <Button
-                    bsStyle="success"
-                    bsSize="large"
-                    href="http://react-bootstrap.github.io/components.html"
-                    target="_blank">
-                  View React Bootstrap Docs
-                </Button>
-              </p>
-            </Grid>
-          </Jumbotron>
+          <div className="App">
+              {this.props.children}
+          </div>
         </div>
     );
   }

@@ -18,6 +18,23 @@
 
         function take_snapshot() {
             Webcam.snap( function(data_uri) {
+                base64data = data_uri.replace('data:image/jpeg;base64,','');
+                
+                var upload = request.post('https://api-keepinganappearance.azurewebsites.net/api/identify')
+                    .send({ "filename": StringExtensions.hashString(file.name) + '.jpg', "content": base64data })
+                    .set('Accept', 'application/json');
+    
+                upload.end(function (err, response) {
+                    if (err) {
+                        console.error(err);
+                    }
+    
+                    if(response && response.ok) {
+                        console.log('yay got ' + JSON.stringify(response.body));
+                        onSuccess(file);
+                    }
+                });
+                
                 document.getElementById('my_result').innerHTML = '<img src="'+data_uri+'"/>';
             } );
         }

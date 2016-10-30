@@ -17,8 +17,8 @@
         Webcam.attach( '#my_camera' );
 
         function take_snapshot() {
-            var lat = 0;
-            var long = 0;
+            var lat = 53.47731349999999;
+            var long = -2.2549624000000676;
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     lat = position.coords.latitude;

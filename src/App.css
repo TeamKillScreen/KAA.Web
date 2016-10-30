@@ -15,6 +15,14 @@ body {
   float: left;
 }
 
+.panel-max-width {
+  max-width: 420px;
+}
+
+.sighting-card-div {
+  display: inline;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;

@@ -2,8 +2,9 @@
  * Created by julianmonono on 30/10/2016.
  */
 import React, { Component } from 'react';
-import { FormGroup, Form, ControlLabel, Col, Image } from 'react-bootstrap';
+import { Image, Panel } from 'react-bootstrap';
 import request from 'superagent';
+import moment from 'moment';
 
 class Portal extends Component {
     constructor(props) {
@@ -93,28 +94,27 @@ class Portal extends Component {
         }
 
         var matches = this.state.matchUrls.map(function(match, index) {
+            var imageSource = 'https://maps.googleapis.com/maps/api/staticmap?center=' +
+                match.latLocation +
+                ',' + match.longLocation +
+                '&zoom=12&size=400x400&key=AIzaSyDtzcN3Ro9r8CSeCFdoqgQ3Fw2AoKyjlas';
+
             return (
-                <div key={index} className="clearfix">
-                    <div className="float-left">
-                        <Image src={match.personUrl}
-                               responsive
-                               width="121"
-                               height="170"/>
-                    </div>
-                    <Form className="float-left" horizontal>
-                        <FormGroup>
-                            <Col componentClass={ControlLabel} sm={12}>
-                                Date recorded: {match.dateRecorded}
-                            </Col>
-                        </FormGroup>
-                        <FormGroup>
-                            <Col componentClass={ControlLabel} sm={12}>
-                                Location: Lat: {match.latLocation} Long: {match.longLocation}
-                                <img src="https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&key=AIzaSyDtzcN3Ro9r8CSeCFdoqgQ3Fw2AoKyjlas"
-                                     alt="Montana" width="171" height="220" />
-                            </Col>
-                        </FormGroup>
-                    </Form>
+                <div key={index}>
+                    <Panel header={<h3>{match.dateRecorded}</h3>}>
+                        <div className="sighting-card-div">
+                            <Image src={match.personUrl}
+
+                                   width="50%"
+                                   height="170"/>
+                        </div>
+                        <div className="sighting-card-div">
+                            <Image src={imageSource}
+
+                                   width="50%"
+                                   height="170"/>
+                        </div>
+                    </Panel>
                 </div>
             );
         });
@@ -131,23 +131,20 @@ class Portal extends Component {
 
         console.log(component.state);
 
-        return (<div>
+        return (<div className="panel-max-width">
             <h2>{component.state.person.name}'s Portal</h2>
-            <div>
+            <Panel header={<h3>Missing since: {moment(component.state.person.missingDate).format('MMMM Do YYYY, h:mm a')}</h3>}
+                   bsStyle="primary"
+                   >
                 <div className="float-left">
                     <Image src={component.state.person.personUrl}
                            responsive
-                           width="171"
+                           width="100%"
                            height="220"/>
                 </div>
-                <div className="spacer"></div>
-                <Form className="float-left" horizontal>
-                    <FormGroup>
-                        <Col componentClass={ControlLabel} sm={12}>
-                            Went missing: {component.state.person.missingDate}
-                        </Col>
-                    </FormGroup>
-                </Form>
+            </Panel>
+            <div>
+
             </div>
             <div className="clearfix"></div>
             <h3>Potential sightings</h3>

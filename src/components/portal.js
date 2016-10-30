@@ -10,7 +10,11 @@ class Portal extends Component {
         super(props);
 
         this.state = {
-            personUrl: null,
+            person: {
+                personUrl: null,
+                name: null,
+                missingDate: null
+            },
             matchUrls: null
         };
     }
@@ -18,6 +22,26 @@ class Portal extends Component {
     componentDidMount() {
         var component = this;
         var requestedPerson = component.props.params.personId || '';
+
+        // Get the personal data based on retrieved person ID
+        request
+            .get('https://api-keepinganappearance.azurewebsites.net/api/missingpersons/' + requestedPerson)
+            .type('application/json')
+            .end(function(err, res){
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+
+                if (res && res.ok) {
+                    var existingPerson = component.state.person;
+                    var updatedProperties = {
+                        name: res.body.Forenames + ' ' + res.body.Surname,
+                        missingDate: res.body.Date_Went_Missing
+                    };
+                    component.setState(Object.assign(existingPerson, updatedProperties));
+                }
+            });
 
         // Get the person based on retrieved ID
         request
@@ -30,9 +54,9 @@ class Portal extends Component {
                 }
 
                 if (res && res.ok) {
-                    component.setState({
-                        personUrl: res.body.mugshot_url
-                    });
+                    var existingPerson = component.state.person;
+                    var updatedProperties = { personUrl: res.body.mugshot_url };
+                    component.setState(Object.assign(existingPerson, updatedProperties));
                 }
             });
 
@@ -86,7 +110,7 @@ class Portal extends Component {
                         <FormGroup>
                             <Col componentClass={ControlLabel} sm={12}>
                                 Location: Lat: {match.latLocation} Long: {match.longLocation}
-                                <img src="https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&key=AIzaSyA5HI9OG4By0v4sKqrpk-yfh8zk8oMR_TE"
+                                <img src="https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&key=AIzaSyDtzcN3Ro9r8CSeCFdoqgQ3Fw2AoKyjlas"
                                      alt="Montana" width="171" height="220" />
                             </Col>
                         </FormGroup>
@@ -98,39 +122,41 @@ class Portal extends Component {
         return matches;
     }
 
-    render() {
+    buildPersonalData() {
+        var component = this;
+
+        if (!component.state.person || component.state.person === null) {
+            return (<div></div>);
+        }
+
+        console.log(component.state);
+
         return (<div>
-            <h2>Thomas' Portal</h2>
+            <h2>{component.state.person.name}'s Portal</h2>
             <div>
                 <div className="float-left">
-                    <Image src={this.state.personUrl}
+                    <Image src={component.state.person.personUrl}
                            responsive
-                    width="171"
-                    height="220"/>
+                           width="171"
+                           height="220"/>
                 </div>
                 <div className="spacer"></div>
                 <Form className="float-left" horizontal>
                     <FormGroup>
                         <Col componentClass={ControlLabel} sm={12}>
-                            Thomas Winter
-                        </Col>
-                    </FormGroup>
-                    <FormGroup>
-                        <Col componentClass={ControlLabel} sm={12}>
-                            Went missing: 12th February 2012
-                        </Col>
-                    </FormGroup>
-                    <FormGroup>
-                        <Col componentClass={ControlLabel} sm={12}>
-                            Last seen in: Oxford
+                            Went missing: {component.state.person.missingDate}
                         </Col>
                     </FormGroup>
                 </Form>
             </div>
             <div className="clearfix"></div>
             <h3>Potential sightings</h3>
-            {this.buildPotentialMatches()}
+            {component.buildPotentialMatches()}
         </div>);
+    }
+
+    render() {
+        return (this.buildPersonalData());
     }
 };
 

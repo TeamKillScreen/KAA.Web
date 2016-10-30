@@ -97,7 +97,10 @@ class Portal extends Component {
             var imageSource = 'https://maps.googleapis.com/maps/api/staticmap?center=' +
                 match.latLocation +
                 ',' + match.longLocation +
-                '&zoom=12&size=400x400&key=AIzaSyDtzcN3Ro9r8CSeCFdoqgQ3Fw2AoKyjlas';
+                '&markers=' +
+                match.latLocation +
+                ',' + match.longLocation +
+                '&zoom=15&size=400x400&key=AIzaSyDtzcN3Ro9r8CSeCFdoqgQ3Fw2AoKyjlas';
 
             return (
                 <div key={index}>
@@ -108,12 +111,13 @@ class Portal extends Component {
                                    width="50%"
                                    height="170"/>
                         </div>
-                        <div className="sighting-card-div">
-                            <Image src={imageSource}
+                        {(match.latLocation === 0 && match.longLocation === 0 ? <div></div> :
+                            <div className="sighting-card-div">
+                                <Image src={imageSource}
 
-                                   width="50%"
-                                   height="170"/>
-                        </div>
+                                       width="50%"
+                                       height="170"/>
+                            </div>)}
                     </Panel>
                 </div>
             );
